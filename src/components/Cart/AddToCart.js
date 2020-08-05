@@ -1,14 +1,13 @@
-import React from "react"
+import React, { useContext } from 'react';
+import { StoreContext } from '../Context/StoreContext';
 
-const AddToCart = () => {
-  return (
-    <button
-      className="button is-primary is-rounded"
-      onClick={() => console.log("added to cart")}
-    >
-      Add To Cart
-    </button>
-  )
-}
+const AddToCart = ({ variantId }) => {
+	const { addProductToCart } = useContext(StoreContext);
+	return (
+		<button className="button is-primary is-rounded" onClick={() => addProductToCart(variantId)}>
+			Add To Cart
+		</button>
+	);
+};
 
-export default AddToCart
+export default AddToCart;

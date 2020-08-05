@@ -7,12 +7,10 @@ import logo from '../images/logo.svg';
 import { StoreContext } from './Context/StoreContext';
 
 const Header = ({ siteTitle }) => {
-	const { addProductToCart, client } = useContext(StoreContext);
+	const { client } = useContext(StoreContext);
 
 	return (
 		<header className="navbar" style={{ background: 'var(--purp)', boxShadow: 'var(--elevation-2)' }}>
-			<button onClick={() => addProductToCart()}>hello</button>
-			{console.log(client)}
 			<div className="navbar-brand">
 				<Link to="/" className="navbar-item">
 					<img style={{ height: 60, maxHeight: 'none', marginBottom: 0 }} src={logo} alt="Level Up Logo" />
