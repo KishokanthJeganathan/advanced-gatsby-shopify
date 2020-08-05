@@ -5,6 +5,7 @@ import { FaShoppingCart } from 'react-icons/fa';
 import '../style.scss';
 import logo from '../images/logo.svg';
 import { StoreContext } from './Context/StoreContext';
+import { Cart } from './Cart/Cart';
 
 const Header = ({ siteTitle }) => {
 	const { client } = useContext(StoreContext);
@@ -15,12 +16,11 @@ const Header = ({ siteTitle }) => {
 				<Link to="/" className="navbar-item">
 					<img style={{ height: 60, maxHeight: 'none', marginBottom: 0 }} src={logo} alt="Level Up Logo" />
 				</Link>
+				<FaShoppingCart
+					style={{ color: 'white', height: 30, width: 30, marginLeft: '20vw', marginTop: '1.5rem' }}
+				/>
 			</div>
-			<div className="navbar-end">
-				<div className="navbar-item">
-					<FaShoppingCart style={{ color: 'white', height: 30, width: 30 }} />
-				</div>
-			</div>
+			<Cart />
 		</header>
 	);
 };

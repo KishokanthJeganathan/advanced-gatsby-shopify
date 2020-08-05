@@ -7,41 +7,54 @@ const client = Client.buildClient({
 	storefrontAccessToken: '1eeedf87c033deb4047230d64cb6f158'
 });
 
-const items = {
+const defaultValues = {
 	isCartOpen: false,
+	toggleCartOpen: () => {},
 	cart: [],
 	addProductToCart: () => {},
-	client
+	client,
+	checkout: {
+		lineItems: []
+	}
 };
 
-export const StoreContext = createContext(items);
+export const StoreContext = createContext(defaultValues);
 
 export const StoreProvider = ({ children }) => {
+	const [ checkout, setCheckout ] = useState(defaultValues.checkout);
+
 	useEffect(() => {
 		initializeCheckout();
 	}, []);
 
-	const [ checkout, setCheckout ] = useState({});
-
 	const initializeCheckout = async () => {
 		try {
+			// Check if it's a browser
 			const isBrowser = typeof window !== 'undefined';
 
-			const currentShopifyId = isBrowser ? localStorage.getItem('checkout_id') : null;
+			// Check if id exists
+			const currentCheckoutId = isBrowser ? localStorage.getItem('checkout_id') : null;
 
-			if (currentShopifyId) {
-				setCheckout(currentShopifyId);
+			let newCheckout = null;
+
+			if (currentCheckoutId) {
+				// If id exists, fetch checkout from Shopify
+				newCheckout = await client.checkout.fetch(currentCheckoutId);
 			} else {
-				const newCheckout = await client.checkout.create();
+				// If id does not, create new checkout
+				newCheckout = await client.checkout.create();
 				if (isBrowser) {
 					localStorage.setItem('checkout_id', newCheckout.id);
-					setCheckout(newCheckout.id);
 				}
 			}
-		} catch (error) {
-			console.error(error);
+
+			// Set checkout to state
+			setCheckout(newCheckout);
+		} catch (e) {
+			console.error(e);
 		}
 	};
+
 	const addProductToCart = async (variantId) => {
 		try {
 			const lineItems = [
@@ -50,11 +63,36 @@ export const StoreProvider = ({ children }) => {
 					quantity: 1
 				}
 			];
-			const addItems = await client.checkout.addLineItems(checkout, lineItems);
-			console.log(addItems.webUrl);
+			const newCheckout = await client.checkout.addLineItems(checkout.id, lineItems);
+			// Buy Now Button Code
+			// window.open(addItems.webUrl, "_blank")
+			console.log(newCheckout);
+			setCheckout(newCheckout);
+			// console.log(addItems.webUrl)
 		} catch (e) {
 			console.error(e);
 		}
 	};
-	return <StoreContext.Provider value={{ ...items, addProductToCart }}>{children}</StoreContext.Provider>;
+
+	const removeFromCart = async (variantId) => {
+		try {
+			const remove = await client.checkout.removeLineItems(checkout.id, [ variantId ]);
+			setCheckout(remove);
+		} catch (e) {
+			console.error(e);
+		}
+	};
+
+	return (
+		<StoreContext.Provider
+			value={{
+				...defaultValues,
+				checkout,
+				addProductToCart,
+				removeFromCart
+			}}
+		>
+			{children}
+		</StoreContext.Provider>
+	);
 };
