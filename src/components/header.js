@@ -8,7 +8,7 @@ import { StoreContext } from './Context/StoreContext';
 import { Cart } from './Cart/Cart';
 
 const Header = ({ siteTitle }) => {
-	const { client } = useContext(StoreContext);
+	const { client, checkout } = useContext(StoreContext);
 
 	return (
 		<header className="navbar" style={{ background: 'var(--purp)', boxShadow: 'var(--elevation-2)' }}>
@@ -16,6 +16,7 @@ const Header = ({ siteTitle }) => {
 				<Link to="/" className="navbar-item">
 					<img style={{ height: 60, maxHeight: 'none', marginBottom: 0 }} src={logo} alt="Level Up Logo" />
 				</Link>
+				<p style={{ padding: '1rem', backgroundColor: 'white' }}>{checkout.lineItems.length}</p>
 				<FaShoppingCart
 					style={{ color: 'white', height: 30, width: 30, marginLeft: '20vw', marginTop: '1.5rem' }}
 				/>
