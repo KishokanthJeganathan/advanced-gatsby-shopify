@@ -60,7 +60,6 @@ export const StoreProvider = ({ children }) => {
 
 			// Set checkout to state
 			setCheckout(newCheckout);
-			console.log(checkout);
 		} catch (e) {
 			console.error(e);
 		}

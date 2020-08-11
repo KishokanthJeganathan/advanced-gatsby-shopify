@@ -38,7 +38,7 @@ export const Cart = () => {
 				<input type="text" placeholder="coupon" value={coupon} onChange={(e) => setCoupon(e.target.value)} />
 				<button>Add Coupon</button>
 			</form>
-			<div>
+			{/* <div>
 				{checkout.discountApplications.length > 0 ? (
 					<p>
 						Coupon:
@@ -75,7 +75,7 @@ export const Cart = () => {
 						<button className="button">Add Coupon</button>
 					</form>
 				)}
-			</div>
+			</div> */}
 			{console.log(checkout)}
 			Total: <h5 className="title">${checkout.totalPrice}</h5>
 			<a style={{ backgroundColor: 'black', color: 'white', padding: '1rem' }} href={checkout.webUrl}>
